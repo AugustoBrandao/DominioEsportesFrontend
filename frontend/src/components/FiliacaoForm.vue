@@ -4,7 +4,7 @@
       <h2>Filiação Global</h2>
 
       <!-- DADOS PESSOAIS -->
-      <h3>Dados Pessoais</h3>
+      <h3>DADOS PESSOAIS</h3>
 
       <input v-model="form.nome" placeholder="Nome completo" required />
       <input v-model="form.endereco" placeholder="Endereço completo" required />
@@ -12,7 +12,9 @@
       <input v-model="form.telefone" placeholder="Telefone" />
       <input v-model="form.celular" placeholder="Celular" required />
 
-      <label>Data de nascimento</label>
+      <div style="width: 100%; text-align: left; margin-top: 25px; margin-bottom: 15px;">
+        <label>Data de nascimento</label>
+      </div> 
       <input type="date" v-model="form.nascimento" required />
 
       <select v-model="form.sexo" required>
@@ -32,7 +34,7 @@
       <input type="email" v-model="form.email" placeholder="E-mail" required />
 
       <!-- DADOS ESPORTIVOS -->
-      <h3>Dados Esportivos</h3>
+      <h3>DADOS ESPORTIVOS</h3>
 
       <input
         v-model="form.modalidade"
@@ -59,22 +61,14 @@
       />
 
       <!-- TIPO DE FILIAÇÃO -->
-      <h3>Tipo de Filiação</h3>
+      <h3>FILIAÇÃO</h3>
 
-      <label class="radio">
-        <input type="radio" value="atleta" v-model="form.tipoFiliacao" />
-        Filiação de Atleta
-      </label>
-
-      <label class="radio">
-        <input type="radio" value="academia" v-model="form.tipoFiliacao" />
-        Filiação de Academia / Clube / Empresa
-      </label>
-
-      <label class="radio">
-        <input type="radio" value="parceria" v-model="form.tipoFiliacao" />
-        Filiação de Parceria
-      </label>
+      <select v-model="form.tipoFiliacao" required>
+        <option disabled value="">Selecione o tipo de filiação</option>
+        <option value="atleta">Filiação de Atleta</option>
+        <option value="academia">Filiação de Academia / Clube / Empresa</option>
+        <option value="parceria">Filiação de Parceria</option>
+      </select>
 
       <!-- TERMOS -->
       <label class="checkbox">
@@ -145,15 +139,13 @@ export default {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 16px;
   background: #f4f6f8;
+  width: 60vh;
 }
 
 .card {
   width: 100%;
-  max-width: 420px;
   background: #fff;
-  padding: 20px;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
@@ -187,14 +179,6 @@ button:disabled {
   background: #aaa;
 }
 
-.radio,
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
 .pix {
   margin-top: 20px;
   text-align: center;
@@ -209,4 +193,16 @@ button:disabled {
   word-break: break-all;
   font-size: 12px;
 }
+
+.checkbox {
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  border: solid 1px black;
+  border-radius: 8px;
+
+}
+
+.checkbox input { width: 100px;   border: solid 1px red; }
 </style>
