@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import payments from '../services/payment.js';
+import payment from "./services/payment.js"
 
 export default {
   data() {
