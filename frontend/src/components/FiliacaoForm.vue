@@ -8,8 +8,6 @@
 
       <input v-model="form.nome" placeholder="Nome completo" required />
       <input v-model="form.endereco" placeholder="Endereço completo" required />
-
-      <input v-model="form.telefone" placeholder="Telefone" />
       <input v-model="form.celular" placeholder="Celular" required />
 
       <div style="width: 100%; text-align: left; margin-top: 25px; margin-bottom: 15px;">
@@ -17,19 +15,20 @@
       </div> 
       <input type="date" v-model="form.nascimento" required />
 
-      <select v-model="form.sexo" required>
-        <option disabled value="">Sexo</option>
-        <option>Masculino</option>
-        <option>Feminino</option>
-        <option>Outro</option>
-      </select>
+      <div style="width: 100%; display: flex;"> 
+        <select style="margin-rigth: 10px;" v-model="form.sexo" required>
+          <option disabled value="">Sexo</option>
+          <option>Masculino</option>
+          <option>Feminino</option>
+        </select>
 
-      <select v-model="form.escolaridade">
-        <option disabled value="">Escolaridade</option>
-        <option>Fundamental</option>
-        <option>Médio</option>
-        <option>Superior</option>
-      </select>
+        <select v-model="form.escolaridade">
+          <option disabled value="">Escolaridade</option>
+          <option>Fundamental</option>
+          <option>Médio</option>
+          <option>Superior</option>
+        </select>
+      </div> 
 
       <input type="email" v-model="form.email" placeholder="E-mail" required />
 
@@ -76,28 +75,48 @@
         Estou de acordo com as regras da Global.
       </label>
 
-      <button type="submit" :disabled="!form.aceite">
+      <button type="submit" :disabled="!formValido">
         Prosseguir para pagamento
       </button>
-    </form>
 
-    <!-- PIX -->
-    <div v-if="pix" class="card pix">
-      <h3>Pagamento via Pix</h3>
-      <img :src="`data:image/png;base64,${pix.qr_code_base64}`" />
-      <p class="pix-code">{{ pix.qr_code }}</p>
-    </div>
+      <div v-if="etapaPagamento" class="payment-tabs">
+        <button
+          type="button"
+          :class="{ active: metodoPagamento === 'pix' }"
+          @click="selecionarMetodo('pix')"
+        >
+          Pix
+        </button>
+
+        <button
+          type="button"
+          :class="{ active: metodoPagamento === 'card' }"
+          @click="selecionarMetodo('card')"
+        >
+          Débito / Crédito
+        </button>
+      </div>
+      <PixPayment :active="metodoPagamento === 'pix'" />
+
+    </form>
   </div>
 </template>
 
 <script>
+import PixPayment from "./payments/PixPayment.vue";
 import payments from "../services/payment.js";
 
 export default {
   name: "FiliacaoForm",
+  components: {
+    PixPayment,
+  },
+
   data() {
     return {
       pix: null,
+      etapaPagamento: false,
+      metodoPagamento: null,
       form: {
         nome: "",
         endereco: "",
@@ -120,17 +139,37 @@ export default {
       },
     };
   },
-  methods: {
-    async submitForm() {
-      try {
-        // aqui depois você pode salvar o cadastro no backend
-        const response = await payments.pix();
-        this.pix = response;
-      } catch (err) {
-        console.error("Erro ao gerar Pix", err);
-      }
+
+  computed: {
+    formValido() {
+      return (
+        this.form.nome &&
+        this.form.endereco &&
+        this.form.celular &&
+        this.form.nascimento &&
+        this.form.sexo &&
+        this.form.email &&
+        this.form.modalidade &&
+        this.form.tipoFiliacao &&
+        this.form.aceite
+      );
     },
   },
+
+  methods: {
+    submitForm() {
+      if (!this.formValido) {
+        alert("Preencha todos os campos obrigatórios antes de prosseguir.");
+        return;
+      }
+
+      this.etapaPagamento = true;
+    },
+
+    selecionarMetodo(metodo) {
+      this.metodoPagamento = metodo;
+    }
+  }
 };
 </script>
 
@@ -144,7 +183,7 @@ export default {
 }
 
 .card {
-  width: 100%;
+  width: 87%;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -155,13 +194,23 @@ h3 {
   margin-bottom: 12px;
 }
 
-input,
-select {
-  width: 100%;
+input{
+  width: 90%;
   padding: 10px;
   margin-bottom: 12px;
   border-radius: 8px;
   border: 1px solid #ddd;
+}
+
+select {
+  width: 45%;
+  padding: 10px;
+  margin-bottom: 12px;
+  margin-left: 14px;
+  margin-right: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display:flex;
 }
 
 button {
@@ -190,7 +239,6 @@ button:disabled {
 }
 
 .pix-code {
-  word-break: break-all;
   font-size: 12px;
 }
 
@@ -205,4 +253,22 @@ button:disabled {
 }
 
 .checkbox input { width: 100px;   border: solid 1px red; }
+
+.payment-tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.payment-tabs button {
+  flex: 1;
+  background: #eee;
+  color: #000;
+}
+
+.payment-tabs button.active {
+  background: #111;
+  color: #fff;
+}
+
 </style>
