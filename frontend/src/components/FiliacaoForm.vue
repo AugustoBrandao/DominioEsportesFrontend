@@ -97,19 +97,22 @@
         </button>
       </div>
       <PixPayment :active="metodoPagamento === 'pix'" />
-
+      <CardPayment v-if="metodoPagamento === 'card'" />
     </form>
   </div>
 </template>
 
 <script>
 import PixPayment from "./payments/PixPayment.vue";
+import CardPayment from "./payments/CardPayment.vue";
+
 import payments from "../services/payment.js";
 
 export default {
   name: "FiliacaoForm",
   components: {
     PixPayment,
+    CardPayment,
   },
 
   data() {

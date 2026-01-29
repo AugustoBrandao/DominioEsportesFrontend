@@ -9,6 +9,11 @@ const payments = {
 
     return response.data;
   },
+
+  async card(body) {
+    const response = await api.post('/process_payment', body);
+    return response.data;
+  }
 };
 
 export default payments;
