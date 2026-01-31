@@ -1,21 +1,58 @@
 <template>
-  <div>
-    <form id="form-checkout">
-      <div id="form-checkout__cardNumber" class="container"></div>
-      <div id="form-checkout__expirationDate" class="container"></div>
-      <div id="form-checkout__securityCode" class="container"></div>
-      <input type="text" id="form-checkout__cardholderName" />
-      <select id="form-checkout__issuer"></select>
-      <select id="form-checkout__installments"></select>
-      <select id="form-checkout__identificationType"></select>
-      <input type="text" id="form-checkout__identificationNumber" />
-      <input type="email" id="form-checkout__cardholderEmail" />
+  <div class="payment-wrapper">
+    <form id="form-checkout" class="credit-card">
+      <div class="card-header">
+        <span class="card-title">Pagamento com Cartão</span>
+        <span class="card-brand">💳</span>
+      </div>
 
-      <button type="submit" id="form-checkout__submit">Pagar</button>
+      <div class="card-number">
+        <div id="form-checkout__cardNumber" class="mp-field"></div>
+      </div>
+
+      <div class="card-row">
+        <div id="form-checkout__expirationDate" class="mp-field"></div>
+        <div id="form-checkout__securityCode" class="mp-field"></div>
+      </div>
+
+      <input
+        type="text"
+        id="form-checkout__cardholderName"
+        class="input"
+        placeholder="Nome impresso no cartão"
+      />
+
+      <div class="card-row">
+        <select id="form-checkout__issuer" class="input"></select>
+        <select id="form-checkout__installments" class="input"></select>
+      </div>
+
+      <div class="card-row">
+        <select id="form-checkout__identificationType" class="input"></select>
+        <input
+          type="text"
+          id="form-checkout__identificationNumber"
+          class="input"
+          placeholder="Documento"
+        />
+      </div>
+
+      <input
+        type="email"
+        id="form-checkout__cardholderEmail"
+        class="input"
+        placeholder="E-mail"
+      />
+
+      <button type="submit" id="form-checkout__submit" class="btn-pay">
+        💳 Pagar
+      </button>
+
       <progress value="0" class="progress-bar">Carregando...</progress>
     </form>
   </div>
 </template>
+
 
 <script>
 import { loadMercadoPago } from "@mercadopago/sdk-js";
@@ -118,17 +155,95 @@ export default {
 
 
 <style scoped>
-#form-checkout {
+.payment-wrapper {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 600px;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
-.container {
-  height: 38px;
-  border: 1px solid rgb(118, 118, 118);
-  border-radius: 4px;
-  padding: 4px;
+.credit-card {
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(135deg, #111, #2b2b2b);
+  border-radius: 18px;
+  padding: 25px;
+  color: #fff;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
+
+/* Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-brand {
+  font-size: 22px;
+}
+
+/* Mercado Pago iframe fields */
+.mp-field {
+  height: 42px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+/* Número do cartão */
+.card-number .mp-field {
+  height: 46px;
+  font-size: 16px;
+}
+
+/* Rows */
+.card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Inputs normais */
+.input {
+  height: 42px;
+  border-radius: 8px;
+  border: none;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Botão */
+.btn-pay {
+  margin-top: 10px;
+  height: 46px;
+  border-radius: 10px;
+  border: none;
+  background: #00d084;
+  color: #111;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-pay:hover {
+  background: #00b974;
+}
+
+/* Progress */
+.progress-bar {
+  width: 100%;
+  margin-top: 6px;
+}
+
 </style>

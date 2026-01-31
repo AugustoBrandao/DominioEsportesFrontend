@@ -13,6 +13,16 @@ const payments = {
   async card(body) {
     const response = await api.post('/process_payment', body);
     return response.data;
+  },
+
+  async create(body) {
+    const response = await api.post('/create', body);
+    return response.data;
+  },
+
+  async getFiliados() {
+    const response = await api.get('/filiados');
+    return response.data;
   }
 };
 

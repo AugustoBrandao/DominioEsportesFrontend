@@ -1,21 +1,21 @@
 <template>
   <div class="container">
-    <FiliacaoForm />
+    <router-view />
   </div>
 </template>
 
 <script>
-import FiliacaoForm from "./components/FiliacaoForm.vue";
-
 export default {
-  components: {
-    FiliacaoForm,
-  },
+  name: "App",
 };
 </script>
 
-<style scoped>
+<style>
+html,
+body,
 .container {
   min-height: 100vh;
+  margin: 0;
 }
 </style>
+

@@ -98,6 +98,7 @@
       </div>
       <PixPayment :active="metodoPagamento === 'pix'" />
       <CardPayment v-if="metodoPagamento === 'card'" />
+      <div class="home-icon" @click="irParaFiliados" style="margin-top: 100px;">Domínio Esportes</div>
     </form>
   </div>
 </template>
@@ -110,6 +111,7 @@ import payments from "../services/payment.js";
 
 export default {
   name: "FiliacaoForm",
+
   components: {
     PixPayment,
     CardPayment,
@@ -160,6 +162,9 @@ export default {
   },
 
   methods: {
+    irParaFiliados() {
+      this.$router.push("/filiados");
+    },
     submitForm() {
       if (!this.formValido) {
         alert("Preencha todos os campos obrigatórios antes de prosseguir.");
@@ -169,12 +174,47 @@ export default {
       this.etapaPagamento = true;
     },
 
-    selecionarMetodo(metodo) {
+    async selecionarMetodo(metodo) {
       this.metodoPagamento = metodo;
-    }
-  }
+
+      const payload = {
+        pix: metodo === 'pix' ? true : false,
+        valor: 100.5,
+        nome: this.form.nome,
+        endereco: this.form.endereco,
+        telefone: this.form.telefone,
+        celular: this.form.celular,
+        nascimento: this.form.nascimento,
+        sexo: this.form.sexo == 'Masculino' ? true : false,
+        escolaridade: this.form.escolaridade,
+        email: this.form.email,
+
+        modalidade: this.form.modalidade,
+        instituicao: this.form.instituicao,
+        enderecoInstituicao: this.form.enderecoInstituicao,
+        telefoneInstituicao: this.form.telefoneInstituicao,
+        celularInstituicao: this.form.celularInstituicao,
+        emailInstituicao: this.form.emailInstituicao,
+
+        tipoFiliacao: this.form.tipoFiliacao,
+      };
+
+      try {
+        const response = await payments.create(payload);
+        console.log("Pagamento criado:", response);
+
+        if (metodo === "pix") {
+          this.pix = response;
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Erro ao iniciar pagamento.");
+      }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .container {
